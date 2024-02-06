@@ -4,8 +4,8 @@ var weatherCards = document.querySelector('.weather-cards');
 var cityInput = document.querySelector('#city-input');
 var searchButton = document.querySelector('#submit');
 
-// Function to create a weather card
-var createWeatherCard = (cityName, weatherItem) => {
+//  create a weather card
+function createWeatherCard  (cityName, weatherItem)  {
     return `
         <li class="cards">
         <h3>${cityName} (${weatherItem.dt_txt.split(" ")[0]})</h3>
@@ -19,9 +19,8 @@ var createWeatherCard = (cityName, weatherItem) => {
 
     var API_KEY = 'c40ec961139c146223010acccae3fa44';
 
-    // Function to fetch weather data and update the UI
+    // fetch weather data and update the UI
     function getWeatherDetails(cityName) {
-    var API_KEY = 'c40ec961139c146223010acccae3fa44';
     var WEATHER_API_URL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${API_KEY}`;
 
     fetch(WEATHER_API_URL)
@@ -30,7 +29,7 @@ var createWeatherCard = (cityName, weatherItem) => {
         // Clear previous weather cards
         weatherCards.innerHTML = "";
 
-        // Update the current weather container
+        //  current weather container
         var currentWeather = data.list[0];
         weatherContainer.innerHTML = `
             <div class="weather-container">
@@ -44,8 +43,8 @@ var createWeatherCard = (cityName, weatherItem) => {
             </div>
         `;
 
-        // Update the weather cards for the next 5 days
-        var fiveDaysForecast = data.list.slice(0, 40); // Get the first 40 items for 5 days
+        //  weather cards for the next 5 days
+        var fiveDaysForecast = data.list.slice(0, 40); 
         for (var i = 0; i < fiveDaysForecast.length; i += 8) {
             var weatherItem = fiveDaysForecast[i];
             weatherCards.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem));
@@ -67,7 +66,7 @@ var createWeatherCard = (cityName, weatherItem) => {
     }
 };
 
- var getCityCoordinates = event => {
+function getCityCoordinates (event) {
     event.preventDefault();
     var cityName = cityInput.value.trim();
     if (!cityName) return;
@@ -80,7 +79,7 @@ var createWeatherCard = (cityName, weatherItem) => {
         console.log(data[0]);
         if (data.length === 0) return alert(`No coordinates found for ${cityName}`);
 
-        var { name, lat, lon } = data[0];
+        var { cityName, lat, lon } = data[0];
         getWeatherDetails(cityName, lat, lon);
         })
     .catch(error => {
@@ -90,5 +89,5 @@ var createWeatherCard = (cityName, weatherItem) => {
     
 };
 
-// Add event listener to the search button
+//  event listener to the search button
 searchButton.addEventListener('click', handleFormSubmit);
