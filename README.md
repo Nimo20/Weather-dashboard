@@ -18,4 +18,4 @@ Humidity
 
 ![image](Assets/image/img.wd.png)
 
-Links:
+Links: https://nimo20.github.io/Weather-dashboard/
