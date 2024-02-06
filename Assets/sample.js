@@ -4,8 +4,6 @@ var weatherCards = document.querySelector('.weather-cards');
 var cityInput = document.querySelector('#city-input');
 var searchButton = document.querySelector('#submit');
 
-
-
 // Function to create a weather card
 var createWeatherCard = (cityName, weatherItem) => {
     return `
@@ -19,9 +17,11 @@ var createWeatherCard = (cityName, weatherItem) => {
     `;
     };
 
-    // Function to fetch weather data and  the UI
+    var API_KEY = 'c40ec961139c146223010acccae3fa44';
+
+    // Function to fetch weather data and update the UI
     function getWeatherDetails(cityName) {
-    var API_KEY = 'c40ec961139c146223010acccae3fa44'; 
+    var API_KEY = 'c40ec961139c146223010acccae3fa44';
     var WEATHER_API_URL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${API_KEY}`;
 
     fetch(WEATHER_API_URL)
@@ -30,7 +30,7 @@ var createWeatherCard = (cityName, weatherItem) => {
         // Clear previous weather cards
         weatherCards.innerHTML = "";
 
-        //  the current weather container
+        // Update the current weather container
         var currentWeather = data.list[0];
         weatherContainer.innerHTML = `
             <div class="weather-container">
@@ -41,14 +41,15 @@ var createWeatherCard = (cityName, weatherItem) => {
             </div>
             <div>
             <img src="https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png" alt="Weather Icon">
-            </div>`;
+            </div>
+        `;
 
-        // the weather cards for the next 5 days
-        var fiveDaysForecast = data.list.slice(1, 6);
-        fiveDaysForecast.forEach(weatherItem => {
+        // Update the weather cards for the next 5 days
+        var fiveDaysForecast = data.list.slice(0, 40); // Get the first 40 items for 5 days
+        for (var i = 0; i < fiveDaysForecast.length; i += 8) {
+            var weatherItem = fiveDaysForecast[i];
             weatherCards.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem));
-        });
-
+        }
         localStorage.setItem('getWeatherDetails', JSON.stringify(data));
         })
         .catch(error => {
@@ -66,5 +67,28 @@ var createWeatherCard = (cityName, weatherItem) => {
     }
 };
 
-//  event listener to the search button
+ var getCityCoordinates = event => {
+    event.preventDefault();
+    var cityName = cityInput.value.trim();
+    if (!cityName) return;
+
+    var GEOCODING_API_URL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`;
+
+    fetch(GEOCODING_API_URL)
+        .then(res => res.json())
+        .then(data => {
+        console.log(data[0]);
+        if (data.length === 0) return alert(`No coordinates found for ${cityName}`);
+
+        var { name, lat, lon } = data[0];
+        getWeatherDetails(cityName, lat, lon);
+        })
+    .catch(error => {
+        console.error("Error fetching city coordinates:", error);
+        alert("Error fetching city coordinates. Please try again.");
+});
+    
+};
+
+// Add event listener to the search button
 searchButton.addEventListener('click', handleFormSubmit);
