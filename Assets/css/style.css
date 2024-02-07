@@ -20,8 +20,8 @@ main {
 
 form {
     display: flex;
-    margin-bottom: 20px;
-    padding: 20px;
+    margin-bottom: 10px;
+    padding: 10px;
     width: 50%;
 
 
@@ -89,6 +89,25 @@ h2 {
 .weather-cards image {
     max-width: 70px;
     margin: 5px 0 -12px 0;
+}
+
+#search-history{
+    list-style: none;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    
+}
+#search-history li{
+    list-style: none;
+    margin-bottom: 10px;
+    background-color: #9e9b9b;
+    /* width: 100%; */
+    padding: 8px;
+    border-radius: 5px;
+
 }
 
 /* Responsive */

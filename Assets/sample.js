@@ -63,6 +63,7 @@ function createWeatherCard  (cityName, weatherItem)  {
     if (cityName) {
         getWeatherDetails(cityName);
         cityInput.value = "";
+        updateSearchHistory(cityName);
     }
 };
 
@@ -88,6 +89,19 @@ function getCityCoordinates (event) {
 });
     
 };
+
+function updateSearchHistory(query) {
+    var searchHistoryContainer = document.getElementById('search-history');
+
+    var listItem = document.createElement('li');
+    listItem.textContent = query;
+
+    searchHistoryContainer.appendChild(listItem);
+}
+
+// Calls the function whenever a new search is performed
+var searchQuery = "";
+updateSearchHistory(searchQuery);
 
 //  event listener to the search button
 searchButton.addEventListener('click', handleFormSubmit);
