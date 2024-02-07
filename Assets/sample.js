@@ -67,35 +67,15 @@ function createWeatherCard  (cityName, weatherItem)  {
     }
 };
 
-function getCityCoordinates (event) {
-    event.preventDefault();
-    var cityName = cityInput.value.trim();
-    if (!cityName) return;
-
-    var GEOCODING_API_URL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`;
-
-    fetch(GEOCODING_API_URL)
-        .then(res => res.json())
-        .then(data => {
-        console.log(data[0]);
-        if (data.length === 0) return alert(`No coordinates found for ${cityName}`);
-
-        var { cityName, lat, lon } = data[0];
-        getWeatherDetails(cityName, lat, lon);
-        })
-    .catch(error => {
-        console.error("Error fetching city coordinates:", error);
-        alert("Error fetching city coordinates. Please try again.");
-});
-    
-};
 
 function updateSearchHistory(query) {
     var searchHistoryContainer = document.getElementById('search-history');
 
     var listItem = document.createElement('li');
     listItem.textContent = query;
-
+    listItem.addEventListener('click', () => {
+    getWeatherDetails(query);
+    });
     searchHistoryContainer.appendChild(listItem);
 }
 
